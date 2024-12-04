@@ -1,24 +1,30 @@
 export function assertGreaterThan(a: number, b: number) {
 	if (a > b) {
-		console.log("%cAssertion passed", "color: green; font-weight: bold;", a, ">", b)
-		return
+		console.log("%cAssertion passed", "color: blue; font-weight: bold;", a, ">", b)
 	}
-	console.error("%cAssertion failed:", "color: red; font-weight: bold;", a, ">", b)
+	else {
+		console.error("%cAssertion failed:", "color: red; font-weight: bold;", a, ">", b)
+	}
+	return a
 }
 
 
 export function assertLowerThan(a: number, b: number) {
 	if (a < b) {
-		console.log("%cAssertion passed", "color: green; font-weight: bold;", a, "<", b)
-		return
+		console.log("%cAssertion passed", "color: blue; font-weight: bold;", a, "<", b)
 	}
-	console.error("%cAssertion failed:", "color: red; font-weight: bold;", a, "<", b)
+	else {
+		console.error("%cAssertion failed:", "color: red; font-weight: bold;", a, "<", b)
+	}
+	return a;
 }
 
-export function assertEq(a: unknown, b: unknown) {
+export function assertEq(a: number, b: number): number {
 	if (a === b) {
 		console.log("%cAssertion passed", "color: green; font-weight: bold;", a);
-		return
 	}
-	console.error("%cAssertion failed:", "color: red; font-weight: bold;", a, "!==", b);
+	else {
+		console.error("%cAssertion failed:", "color: red; font-weight: bold;", a, "!==", b);
+	}
+	return a;
 }
