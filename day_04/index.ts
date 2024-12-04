@@ -9,18 +9,18 @@ async function runWithFile(filePath: string): Promise<number> {
 
 	const sizeVertical = lines[0].length;
 	const sizeHorizontal = lines.length;
-	for (let i = 0; i < sizeHorizontal; i++) {
-		for (let ii = 0; ii < sizeVertical; ii++) {
-			const char = lines[i][ii];
+	for (let y = 0; y < sizeHorizontal; y++) {
+		for (let x = 0; x < sizeVertical; x++) {
+			const char = lines[y][x];
 			if (char === "X") {
-				result += findMAS(lines, i, ii);
+				result += findMAS(lines, y, x);
 			}
 		}
 	}
 	return result;
 }
 
-function findMAS(lines: string[], x: number, y: number) {
+function findMAS(lines: string[], y: number, x: number) {
 	const vectors = [
 		[-1, -1], [-1, 0], [-1, 1],
 		[-0, -1], /*     */[-0, 1],
@@ -30,9 +30,9 @@ function findMAS(lines: string[], x: number, y: number) {
 	let result = 0;
 	for (let index = 0; index < vectors.length; index++) {
 		const vector = vectors[index];
-		if (lines[x + vector[0]]?.[y + vector[1]] === 'M') {
-			if (lines[x + vector[0] * 2]?.[y + vector[1] * 2] === 'A') {
-				if (lines[x + vector[0] * 3]?.[y + vector[1] * 3] === 'S') {
+		if (lines[y + vector[0]]?.[x + vector[1]] === 'M') {
+			if (lines[y + vector[0] * 2]?.[x + vector[1] * 2] === 'A') {
+				if (lines[y + vector[0] * 3]?.[x + vector[1] * 3] === 'S') {
 					result++;
 				}
 			}

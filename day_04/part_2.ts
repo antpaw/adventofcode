@@ -2,12 +2,6 @@ import path from "node:path";
 import { assertEq, assertGreaterThan, assertLowerThan } from "../utils/assert.ts";
 import { readFile, readLines } from "../utils/files.ts";
 
-const vectorsUp = [
-	[-1, -1],
-];
-const vectorsDown = [
-	[+1, +1],
-];
 async function runWithFile(filePath: string): Promise<number> {
 	const lines = await readLines(filePath);
 
@@ -15,45 +9,35 @@ async function runWithFile(filePath: string): Promise<number> {
 
 	const sizeVertical = lines[0].length;
 	const sizeHorizontal = lines.length;
-	for (let i = 0; i < sizeHorizontal; i++) {
-		for (let ii = 0; ii < sizeVertical; ii++) {
-			const char = lines[i][ii];
-			if (char === "M") {
-				if (findAS(lines, i, ii, [1, 1], "A", "S")) {
-					if (lines[i + 2]?.[ii] === 'S') {
-						result += findAS(lines, i + 2, ii, [-1, 1], "A", "M") ? 1 : 0;
-					}
-					if (lines[i]?.[ii + 2] === 'S') {
-						result += findAS(lines, i + 2, ii, [1, +1], "A", "M") ? 1 : 0;
-					}
-					if (lines[i - 2]?.[ii] === 'S') {
-						result += findAS(lines, i + 2, ii, [-1, +1], "A", "M") ? 1 : 0;
-					}
-					if (lines[i]?.[ii - 2] === 'S') {
-						result += findAS(lines, i + 2, ii, [1, -1], "A", "M") ? 1 : 0;
-					}
+	for (let y = 0; y < sizeHorizontal; y++) {
+		for (let x = 0; x < sizeVertical; x++) {
+			if (findAS(lines, y, x, [1, 1], "M", "A", "S")) {
+				if (findAS(lines, y + 2, x, [-1, 1], "M", "A", "S")) {
+					result++;
 				}
-				if (findAS(lines, i, ii, [1, -1], "A", "S")) {
-					if (lines[i + 2]?.[ii] === 'M') {
-						result += findAS(lines, i + 2, ii, [-1, 1], 'A', 'S') ? 1 : 0;
-					}
-					if (lines[i + 2]?.[ii] === 'S') {
-						result += findAS(lines, i + 2, ii, [-1, 1], 'A', 'M') ? 1 : 0;
-					}
+				if (findAS(lines, y + 2, x, [-1, 1], "S", "A", "M")) {
+					result++;
 				}
 			}
+			if (findAS(lines, y, x, [1, 1], "S", "A", "M")) {
+				if (findAS(lines, y + 2, x, [-1, 1], "M", "A", "S")) {
+					result++;
+				}
+				if (findAS(lines, y + 2, x, [-1, 1], "S", "A", "M")) {
+					result++;
+				}
+			}
+
 		}
 	}
+
 	return result;
 }
 
-function findAS(lines: string[], x: number, y: number, vector: number[], foo: string, bar: string) {
-	if (lines[x + vector[0]]?.[y + vector[1]] === foo) {
-		if (lines[x + vector[0] * 2]?.[y + vector[1] * 2] === bar) {
-			return true;
-		}
-	}
-	return false;
+function findAS(lines: string[], x: number, y: number, vector: number[], zoo: string, foo: string, bar: string) {
+	return (lines[x]?.[y] === zoo) &&
+		(lines[x + vector[0]]?.[y + vector[1]] === foo) &&
+		(lines[x + vector[0] * 2]?.[y + vector[1] * 2] === bar)
 }
 
 function buildPath(filePath: string): string {
