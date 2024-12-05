@@ -25,22 +25,18 @@ function check(order: number[], rules: string[]) {
 	for (let orderI = 0; orderI < order.length; orderI++) {
 		const orderNumber = order[orderI];
 
-		// for (let orderAfterI = orderI + 1; orderAfterI < order.length; orderAfterI++) {
-		// 	const orderAfterNumber = order[orderAfterI];
+		for (let orderAfterI = orderI + 1; orderAfterI < order.length; orderAfterI++) {
+			const orderAfterNumber = order[orderAfterI];
 
-		// 	for (let rulesI = 0; rulesI < rules.length; rulesI++) {
-		// 		const [ruleNumber, beforeCheckNumber] = getRule(rules[rulesI]);
-		// 		if (orderNumber === ruleNumber && orderAfterNumber === beforeCheckNumber) {
-		// 			console.log('found rule', orderNumber, beforeCheckNumber);
-
-		// 			if (ruleNumber < orderAfterNumber) {
-		// 				console.log("a", orderNumber, beforeCheckNumber, rules[rulesI]);
-
-		// 				return false;
-		// 			}
-		// 		}
-		// 	}
-		// }
+			for (let rulesI = 0; rulesI < rules.length; rulesI++) {
+				const [ruleNumber, beforeCheckNumber] = getRule(rules[rulesI]);
+				if (orderNumber === beforeCheckNumber && orderAfterNumber === ruleNumber) {
+					if (ruleNumber < beforeCheckNumber) {
+						return false;
+					}
+				}
+			}
+		}
 
 
 		for (let orderBeforeI = 0; orderBeforeI < orderI; orderBeforeI++) {
@@ -75,5 +71,5 @@ function buildPath(filePath: string): string {
 		),
 		143,
 	);
-	assertGreaterThan(await runWithFile(buildPath("./input_a.txt"), buildPath("./input_b.txt"),), 2350);
+	assertEq(await runWithFile(buildPath("./input_a.txt"), buildPath("./input_b.txt"),), 4957);
 })();

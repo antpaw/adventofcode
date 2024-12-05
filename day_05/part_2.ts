@@ -30,6 +30,21 @@ async function runWithFile(
 function reorderByCheck(order: number[], rules: string[]) {
 	for (let orderI = 0; orderI < order.length; orderI++) {
 		const orderNumber = order[orderI];
+		for (let orderAfterI = orderI + 1; orderAfterI < order.length; orderAfterI++) {
+			const orderAfterNumber = order[orderAfterI];
+
+			for (let rulesI = 0; rulesI < rules.length; rulesI++) {
+				const [ruleNumber, beforeCheckNumber] = getRule(rules[rulesI]);
+				if (orderNumber === beforeCheckNumber && orderAfterNumber === ruleNumber) {
+					if (ruleNumber < beforeCheckNumber) {
+						const o = [...order];
+						o[orderI] = order[orderAfterI];
+						o[orderAfterI] = order[orderI];
+						return reorderByCheck(o, rules);
+					}
+				}
+			}
+		}
 
 		for (let orderBeforeI = 0; orderBeforeI < orderI; orderBeforeI++) {
 			const orderBeforeNumber = order[orderBeforeI];
@@ -42,10 +57,7 @@ function reorderByCheck(order: number[], rules: string[]) {
 					if (orderBeforeNumber < ruleNumber) {
 						const o = [...order];
 						o[orderI] = order[orderBeforeI];
-						// o[orderBeforeI] = order[orderI];
-						// o[orderI] = order[orderBeforeI];
-						o.splice(orderI, 0, order[orderI]);
-						o.splice(orderBeforeI, 1);
+						o[orderBeforeI] = order[orderI];
 						return reorderByCheck(o, rules);
 					}
 				}
@@ -58,6 +70,19 @@ function reorderByCheck(order: number[], rules: string[]) {
 function check(order: number[], rules: string[]) {
 	for (let orderI = 0; orderI < order.length; orderI++) {
 		const orderNumber = order[orderI];
+
+		for (let orderAfterI = orderI + 1; orderAfterI < order.length; orderAfterI++) {
+			const orderAfterNumber = order[orderAfterI];
+
+			for (let rulesI = 0; rulesI < rules.length; rulesI++) {
+				const [ruleNumber, beforeCheckNumber] = getRule(rules[rulesI]);
+				if (orderNumber === beforeCheckNumber && orderAfterNumber === ruleNumber) {
+					if (ruleNumber < beforeCheckNumber) {
+						return false;
+					}
+				}
+			}
+		}
 
 		for (let orderBeforeI = 0; orderBeforeI < orderI; orderBeforeI++) {
 			const orderBeforeNumber = order[orderBeforeI];
