@@ -8,7 +8,6 @@ export function assertGreaterThan(a: number, b: number) {
 	return a
 }
 
-
 export function assertLowerThan(a: number, b: number) {
 	if (a < b) {
 		console.log("%cAssertion passed", "color: blue; font-weight: bold;", a, "<", b)
