@@ -1,5 +1,9 @@
 import path from "node:path";
-import { assertEq, assertGreaterThan, assertLowerThan } from "../utils/assert.ts";
+import {
+	assertEq,
+	assertGreaterThan,
+	assertLowerThan,
+} from "../utils/assert.ts";
 import { readFile, readLines } from "../utils/files.ts";
 
 async function runWithFile(filePath: string): Promise<number> {
@@ -27,23 +31,31 @@ async function runWithFile(filePath: string): Promise<number> {
 					result++;
 				}
 			}
-
 		}
 	}
 
 	return result;
 }
 
-function findAS(lines: string[], x: number, y: number, vector: number[], zoo: string, foo: string, bar: string) {
-	return (lines[x]?.[y] === zoo) &&
-		(lines[x + vector[0]]?.[y + vector[1]] === foo) &&
-		(lines[x + vector[0] * 2]?.[y + vector[1] * 2] === bar)
+function findAS(
+	lines: string[],
+	x: number,
+	y: number,
+	vector: number[],
+	zoo: string,
+	foo: string,
+	bar: string,
+) {
+	return (
+		lines[x]?.[y] === zoo &&
+		lines[x + vector[0]]?.[y + vector[1]] === foo &&
+		lines[x + vector[0] * 2]?.[y + vector[1] * 2] === bar
+	);
 }
 
 function buildPath(filePath: string): string {
 	return path.join(import.meta.dirname, filePath);
 }
-
 (async () => {
 	assertEq(await runWithFile(buildPath("./input_simple_2.txt")), 9);
 	assertLowerThan(await runWithFile(buildPath("./input.txt")), 2191);

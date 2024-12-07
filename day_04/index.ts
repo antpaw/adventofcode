@@ -22,17 +22,22 @@ async function runWithFile(filePath: string): Promise<number> {
 
 function findMAS(lines: string[], y: number, x: number) {
 	const vectors = [
-		[-1, -1], [-1, 0], [-1, 1],
-		[-0, -1], /*     */[-0, 1],
-		[+1, -1], [+1, 0], [+1, 1],
+		[-1, -1],
+		[-1, 0],
+		[-1, 1],
+		[-0, -1],
+		/*     */ [-0, 1],
+		[+1, -1],
+		[+1, 0],
+		[+1, 1],
 	];
 
 	let result = 0;
 	for (let index = 0; index < vectors.length; index++) {
 		const vector = vectors[index];
-		if (lines[y + vector[0]]?.[x + vector[1]] === 'M') {
-			if (lines[y + vector[0] * 2]?.[x + vector[1] * 2] === 'A') {
-				if (lines[y + vector[0] * 3]?.[x + vector[1] * 3] === 'S') {
+		if (lines[y + vector[0]]?.[x + vector[1]] === "M") {
+			if (lines[y + vector[0] * 2]?.[x + vector[1] * 2] === "A") {
+				if (lines[y + vector[0] * 3]?.[x + vector[1] * 3] === "S") {
 					result++;
 				}
 			}
@@ -44,7 +49,6 @@ function findMAS(lines: string[], y: number, x: number) {
 function buildPath(filePath: string): string {
 	return path.join(import.meta.dirname, filePath);
 }
-
 (async () => {
 	assertEq(await runWithFile(buildPath("./input_simple.txt")), 18);
 	assertGreaterThan(await runWithFile(buildPath("./input.txt")), 2350);

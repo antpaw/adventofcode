@@ -1,5 +1,9 @@
 import path from "node:path";
-import { assertEq, assertGreaterThan, assertLowerThan } from "../utils/assert.ts";
+import {
+	assertEq,
+	assertGreaterThan,
+	assertLowerThan,
+} from "../utils/assert.ts";
 import { readFile, readLines } from "../utils/files.ts";
 
 async function runWithFile(
@@ -30,12 +34,19 @@ async function runWithFile(
 function reorderByCheck(order: number[], rules: string[]) {
 	for (let orderI = 0; orderI < order.length; orderI++) {
 		const orderNumber = order[orderI];
-		for (let orderAfterI = orderI + 1; orderAfterI < order.length; orderAfterI++) {
+		for (
+			let orderAfterI = orderI + 1;
+			orderAfterI < order.length;
+			orderAfterI++
+		) {
 			const orderAfterNumber = order[orderAfterI];
 
 			for (let rulesI = 0; rulesI < rules.length; rulesI++) {
 				const [ruleNumber, beforeCheckNumber] = getRule(rules[rulesI]);
-				if (orderNumber === beforeCheckNumber && orderAfterNumber === ruleNumber) {
+				if (
+					orderNumber === beforeCheckNumber &&
+					orderAfterNumber === ruleNumber
+				) {
 					if (ruleNumber < beforeCheckNumber) {
 						const o = [...order];
 						o[orderI] = order[orderAfterI];
@@ -71,12 +82,19 @@ function check(order: number[], rules: string[]) {
 	for (let orderI = 0; orderI < order.length; orderI++) {
 		const orderNumber = order[orderI];
 
-		for (let orderAfterI = orderI + 1; orderAfterI < order.length; orderAfterI++) {
+		for (
+			let orderAfterI = orderI + 1;
+			orderAfterI < order.length;
+			orderAfterI++
+		) {
 			const orderAfterNumber = order[orderAfterI];
 
 			for (let rulesI = 0; rulesI < rules.length; rulesI++) {
 				const [ruleNumber, beforeCheckNumber] = getRule(rules[rulesI]);
-				if (orderNumber === beforeCheckNumber && orderAfterNumber === ruleNumber) {
+				if (
+					orderNumber === beforeCheckNumber &&
+					orderAfterNumber === ruleNumber
+				) {
 					if (ruleNumber < beforeCheckNumber) {
 						return false;
 					}
@@ -109,9 +127,7 @@ function getRule(rule: string) {
 function buildPath(filePath: string): string {
 	return path.join(import.meta.dirname, filePath);
 }
-
 (async () => {
-
 	assertEq(
 		await runWithFile(
 			buildPath("./input_simple_a.txt"),
@@ -123,5 +139,7 @@ function buildPath(filePath: string): string {
 		assertGreaterThan(
 			await runWithFile(buildPath("./input_a.txt"), buildPath("./input_b.txt")),
 			6780,
-		), 7280);
+		),
+		7280,
+	);
 })();

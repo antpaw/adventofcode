@@ -8,5 +8,5 @@ export async function readLines(filePath: string): Promise<string[]> {
 }
 
 export async function readFile(filePath: string): Promise<string> {
-	return await fs.readFile(filePath, "utf8")
+	return await fs.readFile(filePath, "utf8");
 }

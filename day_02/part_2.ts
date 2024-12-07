@@ -36,9 +36,11 @@ function check(numbers) {
 		const dirF = getDir(xF);
 
 		if (
-			dirB === dirF
-			&& (Math.abs(xB) > 0 && Math.abs(xF) > 0)
-			&& (Math.abs(xB) < 4 && Math.abs(xF) < 4)
+			dirB === dirF &&
+			Math.abs(xB) > 0 &&
+			Math.abs(xF) > 0 &&
+			Math.abs(xB) < 4 &&
+			Math.abs(xF) < 4
 		) {
 			continue;
 		}
@@ -57,7 +59,6 @@ function getDir(x) {
 function buildPath(filePath: string): string {
 	return path.join(import.meta.dirname, filePath);
 }
-
 (async () => {
 	assertEq(await runWithFile(buildPath("./input.txt")), 514);
 	assertEq(await runWithFile(buildPath("./input_simple.txt")), 4);

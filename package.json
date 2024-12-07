@@ -1,7 +1,13 @@
 {
-  "type": "module",
-  "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
-    "@types/node": "^22.10.1"
-  }
+	"scripts": {
+		"lint:check": "biome check ./",
+		"lint:check:write": "biome check --write --unsafe ./",
+		"lint:format": "biome format ./",
+		"lint:format:write": "biome format --write ./",
+		"lint:all": "pnpm run lint:check && pnpm run lint:format"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^1.9.4",
+		"@types/node": "^22.10.1"
+	}
 }
