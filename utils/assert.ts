@@ -1,4 +1,4 @@
-export function assertGreaterThan(a: number, b: number) {
+export function greaterThan(a: number, b: number) {
 	if (a > b) {
 		console.log(
 			"%cAssertion passed",
@@ -19,7 +19,7 @@ export function assertGreaterThan(a: number, b: number) {
 	return a;
 }
 
-export function assertLowerThan(a: number, b: number) {
+export function lowerThan(a: number, b: number) {
 	if (a < b) {
 		console.log(
 			"%cAssertion passed",
@@ -40,7 +40,7 @@ export function assertLowerThan(a: number, b: number) {
 	return a;
 }
 
-export function assertEq(a: number, b: number): number {
+export function eq(a: number, b: number): number {
 	if (a === b) {
 		console.log("%cAssertion passed", "color: green; font-weight: bold;", a);
 	} else {

@@ -1,9 +1,5 @@
 import path from "node:path";
-import {
-	assertEq,
-	assertGreaterThan,
-	assertLowerThan,
-} from "../utils/assert.ts";
+import { eq, greaterThan, lowerThan } from "../utils/assert.ts";
 import { readFile, readLines } from "../utils/files.ts";
 
 async function runWithFile(filePath: string): Promise<number> {
@@ -89,8 +85,8 @@ function buildPath(filePath: string): string {
 }
 (async () => {
 	const t0 = performance.now();
-	// assertEq(await runWithFile(buildPath("./input_simple.txt")), 6);
-	assertEq(await runWithFile(buildPath("./input.txt")), 1909);
+	// eq(await runWithFile(buildPath("./input_simple.txt")), 6);
+	eq(await runWithFile(buildPath("./input.txt")), 1909);
 	const t1 = performance.now();
 	console.log(`took ${t1 - t0} milliseconds.`);
 })();

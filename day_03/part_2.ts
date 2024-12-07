@@ -1,5 +1,5 @@
 import path from "node:path";
-import { assertEq, assertGreaterThan } from "../utils/assert.ts";
+import { eq, greaterThan } from "../utils/assert.ts";
 import { readFile } from "../utils/files.ts";
 
 async function runWithFile(filePath: string): Promise<number> {
@@ -44,6 +44,6 @@ function buildPath(filePath: string): string {
 	return path.join(import.meta.dirname, filePath);
 }
 (async () => {
-	assertEq(await runWithFile(buildPath("./input_simple_2.txt")), 48);
-	assertGreaterThan(await runWithFile(buildPath("./input.txt")), 51830478);
+	eq(await runWithFile(buildPath("./input_simple_2.txt")), 48);
+	greaterThan(await runWithFile(buildPath("./input.txt")), 51830478);
 })();

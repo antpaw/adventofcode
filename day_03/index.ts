@@ -1,5 +1,5 @@
 import path from "node:path";
-import { assertEq } from "../utils/assert.ts";
+import { eq } from "../utils/assert.ts";
 import { readFile } from "../utils/files.ts";
 
 async function runWithFile(filePath: string): Promise<number> {
@@ -33,6 +33,6 @@ function buildPath(filePath: string): string {
 	return path.join(import.meta.dirname, filePath);
 }
 (async () => {
-	assertEq(await runWithFile(buildPath("./input_simple.txt")), 161);
-	assertEq(await runWithFile(buildPath("./input.txt")), 169021493);
+	eq(await runWithFile(buildPath("./input_simple.txt")), 161);
+	eq(await runWithFile(buildPath("./input.txt")), 169021493);
 })();
