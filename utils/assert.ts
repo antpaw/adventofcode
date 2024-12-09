@@ -54,3 +54,18 @@ export function eq(a: number, b: number): number {
 	}
 	return a;
 }
+
+export function eqString(a: string, b: string): string {
+	if (a === b) {
+		console.log("%cAssertion passed", "color: green; font-weight: bold;", a);
+	} else {
+		console.error(
+			"%cAssertion failed:",
+			"color: red; font-weight: bold;",
+			a,
+			"!==",
+			b,
+		);
+	}
+	return a;
+}

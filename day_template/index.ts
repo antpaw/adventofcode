@@ -19,7 +19,3 @@ async function runWithFile(filePath: string): Promise<number> {
 	}
 	return result;
 }
-
-function buildPath(filePath: string): string {
-	return path.join(import.meta.dirname, filePath);
-}
