@@ -6,7 +6,7 @@ import { readFile, readLines } from "../utils/files.ts";
 	const buildPath = (f: string) => path.join(import.meta.dirname, f);
 
 	eq(await runWithFile(buildPath("./input_simple.txt")), 2858);
-	// greaterThan(await runWithFile(buildPath("./input.txt")), 1928);
+	eq(await runWithFile(buildPath("./input.txt")), 6327174563252);
 })();
 
 async function runWithFile(filePath: string): Promise<number> {
@@ -33,13 +33,8 @@ async function runWithFile(filePath: string): Promise<number> {
 		}
 	}
 
-	const compressedLayout: string[] = compress(layout, false);
-	eqString(
-		compressedLayout.join(""),
-		"0099.111777244.33388885555.6666...........",
-	);
-	console.log(layout.join(""));
-	console.log(compressedLayout.join(""));
+	const filesMap = buildFilesMap(layout);
+	const compressedLayout = compress(layout, filesMap);
 
 	for (let i = 0; i < compressedLayout.length; i++) {
 		if (compressedLayout[i] === ".") {
@@ -51,87 +46,88 @@ async function runWithFile(filePath: string): Promise<number> {
 	return result;
 }
 
-function compress(originLayout: string[], debug = false) {
-	const compressedLayout: string[] = [];
-	const layout = [...originLayout];
+function compress(originalLayout: string[], data: FileSizes) {
+	const layout = [...originalLayout];
 	const layoutLength = layout.length;
-	let frontIndex = 0;
-	while (frontIndex < layoutLength) {
-		const print = layout[frontIndex];
+	for (let i = 0; i < layoutLength; i++) {
+		const print = originalLayout[i];
 
 		if (print === ".") {
-			let dotSpace = 1;
+			let spaceAvailable = 0;
 			while (true) {
-				if (layout[frontIndex + dotSpace] !== ".") {
+				spaceAvailable++;
+				if (originalLayout[i + spaceAvailable] !== ".") {
 					break;
 				}
-				dotSpace++;
 			}
-			const [foundNumber, dotsNeeded, backIndex] = findNextBestFit(
-				frontIndex,
-				layout,
-				layoutLength,
-				dotSpace,
+
+			const [fileId, fileSize, fileIndex] = findNextBestFit(
+				data,
+				spaceAvailable,
+				i,
 			);
 
-			if (foundNumber !== undefined) {
-				if (debug)
-					console.log(foundNumber, dotsNeeded, dotSpace, backIndex, frontIndex);
-
-				for (let i = 0; i < dotsNeeded; i++) {
-					layout[backIndex + i] = ".";
+			if (fileId !== undefined) {
+				for (let ii = 0; ii < fileSize; ii++) {
+					layout[fileIndex + ii] = ".";
 				}
-
-				for (let i = 0; i < dotSpace; i++) {
-					if (i < dotsNeeded) {
-						compressedLayout.push(foundNumber);
-					} else {
-						compressedLayout.push(".");
-					}
+				for (let ii = 0; ii < fileSize; ii++) {
+					layout[i + ii] = String(fileId);
 				}
-				frontIndex += dotSpace;
-				continue;
+				i += fileSize - 1;
 			}
 		}
-
-		compressedLayout.push(print);
-		frontIndex++;
 	}
-	return compressedLayout;
+	return layout;
 }
 
 function findNextBestFit(
-	startIndex: number,
-	layout: string[],
-	layoutLength: number,
+	filesMap: FileSizes,
 	spaceAvailable: number,
-): [string | undefined, number, number] {
-	const reverseLayout = [...layout];
-	reverseLayout.reverse();
-
-	let dotsNeeded = 0;
-	let ignoreNumber: string | undefined = undefined;
-	let foundNumber: string | undefined = undefined;
-	for (let i = 0; i < layoutLength - startIndex; i++) {
-		const print = reverseLayout[i];
-		if (print !== "." && print !== ignoreNumber) {
-			dotsNeeded++;
-			if (foundNumber === undefined) {
-				foundNumber = print;
-			}
-		}
-		if (print === foundNumber) {
-			if (dotsNeeded <= spaceAvailable) {
-				if (reverseLayout[i + 1] !== foundNumber) {
-					return [foundNumber, dotsNeeded, layoutLength - i - 1];
-				}
-			} else {
-				ignoreNumber = foundNumber;
-				dotsNeeded = 0;
-				foundNumber = undefined;
-			}
+	cursor: number,
+): [number | undefined, number, number] {
+	for (let fileId = 11_000; fileId > 0; fileId--) {
+		const file = filesMap.get(fileId);
+		if (
+			file !== undefined &&
+			file.size <= spaceAvailable &&
+			cursor < file.index
+		) {
+			filesMap.delete(fileId);
+			return [fileId, file.size, file.index];
 		}
 	}
 
 	return [undefined, 0, 0];
 }
+
+function buildFilesMap(layout: string[]): FileSizes {
+	const layoutLength = layout.length;
+	const ret: FileSizes = new Map();
+
+	let spaceUsed = 0;
+	let print: string = layout[0];
+	for (let i = 0; i < layoutLength; i++) {
+		spaceUsed++;
+		if (layout[i + 1] !== print) {
+			const fileId = Number(print);
+			if (print !== "." && ret.get(fileId) === undefined) {
+				ret.set(fileId, {
+					index: i - spaceUsed + 1,
+					size: spaceUsed,
+				});
+			}
+			spaceUsed = 0;
+			print = layout[i + 1];
+		}
+	}
+
+	return ret;
+}
+
+type File = {
+	index: number;
+	size: number;
+};
+
+type FileSizes = Map<number, File>;
