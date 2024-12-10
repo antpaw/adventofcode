@@ -5,17 +5,73 @@ import { readFile, readLines } from "../utils/files.ts";
 (async () => {
 	const buildPath = (f: string) => path.join(import.meta.dirname, f);
 
-	eq(await runWithFile(buildPath("./input_simple.txt")), 18);
-	// greaterThan(await runWithFile(buildPath("./input.txt")), 2350);
+	eq(await runWithFile(buildPath("./input_simple.txt")), 36);
+	eq(await runWithFile(buildPath("./input.txt")), 644);
 })();
 
 async function runWithFile(filePath: string): Promise<number> {
 	const lines = await readLines(filePath);
 
-	let result = 0;
+	const grid: number[][] = [];
+	const sizeVertical = lines.length;
+	const sizeHorizontal = lines[0].length;
 
-	for (let y = 0; y < lines.length; y++) {
-		result++;
+	let result = 0;
+	for (let y = 0; y < sizeVertical; y++) {
+		const line = lines[y];
+		grid[y] = [];
+		for (let x = 0; x < sizeHorizontal; x++) {
+			grid[y][x] = Number(line[x]);
+		}
+	}
+
+	const vectors = [
+		[-1, 0],
+		[-0, 1],
+		[+1, 0],
+		[-0, -1],
+	];
+	const findAdjacentPeaks = (
+		coords: number[][],
+		height: number,
+		foundPeaks: Set<number>,
+	) => {
+		const valid: number[][] = [];
+		let ret = 0;
+		for (let i = 0; i < coords.length; i++) {
+			const [x, y] = coords[i];
+			for (const [dx, dy] of vectors) {
+				const nx = x + dx * 1;
+				const ny = y + dy * 1;
+				const nextPoint = grid[ny]?.[nx];
+				if (nextPoint === height) {
+					valid.push([nx, ny]);
+					if (height === 9 && !foundPeaks.has(ny * sizeVertical + nx)) {
+						ret++;
+						foundPeaks.add(ny * sizeVertical + nx);
+					}
+				}
+			}
+		}
+		if (height === 9) {
+			return ret;
+		}
+		if (valid.length) {
+			return findAdjacentPeaks(valid, height + 1, foundPeaks);
+		}
+		return 0;
+	};
+
+	for (let y = 0; y < sizeVertical; y++) {
+		const coordsLine = grid[y];
+		for (let x = 0; x < sizeHorizontal; x++) {
+			const point = coordsLine[x];
+			if (point !== 0) {
+				continue;
+			}
+
+			result += findAdjacentPeaks([[x, y]], 1, new Set());
+		}
 	}
 	return result;
 }
