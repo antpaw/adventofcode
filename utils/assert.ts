@@ -40,22 +40,7 @@ export function lowerThan(a: number, b: number) {
 	return a;
 }
 
-export function eq(a: number, b: number): number {
-	if (a === b) {
-		console.log("%cAssertion passed", "color: green; font-weight: bold;", a);
-	} else {
-		console.error(
-			"%cAssertion failed:",
-			"color: red; font-weight: bold;",
-			a,
-			"!==",
-			b,
-		);
-	}
-	return a;
-}
-
-export function eqString(a: string, b: string): string {
+export function eq<T>(a: T, b: T): T {
 	if (a === b) {
 		console.log("%cAssertion passed", "color: green; font-weight: bold;", a);
 	} else {

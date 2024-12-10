@@ -1,5 +1,5 @@
 import path from "node:path";
-import { eq, eqString, greaterThan, lowerThan } from "../utils/assert.ts";
+import { eq, greaterThan, lowerThan } from "../utils/assert.ts";
 import { readFile, readLines } from "../utils/files.ts";
 
 (async () => {
