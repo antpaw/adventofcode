@@ -5,17 +5,39 @@ import { readFile, readLines } from "../utils/files.ts";
 (async () => {
 	const buildPath = (f: string) => path.join(import.meta.dirname, f);
 
-	eq(await runWithFile(buildPath("./input_simple.txt")), -1);
-	// greaterThan(await runWithFile(buildPath("./input.txt")), -1);
+	eq(await runWithFile(buildPath("./input_simple.txt")), 55312);
+	eq(await runWithFile(buildPath("./input.txt")), 229043);
 })();
 
 async function runWithFile(filePath: string): Promise<number> {
-	const lines = await readLines(filePath);
+	const line = await readFile(filePath);
 
-	let result = 0;
+	const numbers = line.split(" ").map(Number);
 
-	for (let y = 0; y < lines.length; y++) {
-		result++;
+	const makeStep = (input: number[]) => {
+		const ret: number[] = [];
+		for (let i = 0; i < input.length; i++) {
+			const number = input[i];
+
+			if (number === 0) {
+				ret.push(1);
+			} else if (String(number).length % 2 === 0) {
+				const sNumber = String(number);
+				const sNumberLengthHalf = sNumber.length / 2;
+
+				ret.push(Number(sNumber.substring(0, sNumberLengthHalf)));
+				ret.push(Number(sNumber.substring(sNumberLengthHalf)));
+			} else {
+				ret.push(2024 * number);
+			}
+		}
+		return ret;
+	};
+
+	let a = numbers;
+
+	for (let i = 0; i < 25; i++) {
+		a = makeStep(a);
 	}
-	return result;
+	return a.length;
 }
