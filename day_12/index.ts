@@ -6,7 +6,7 @@ import { compress, compressXY, decompress } from "../utils/grid.ts";
 (async () => {
 	const buildPath = (f: string) => path.join(import.meta.dirname, f);
 
-	// eq(await runWithFile(buildPath("./input_simple.txt")), 1930);
+	eq(await runWithFile(buildPath("./input_simple.txt")), 1930);
 	eq(await runWithFile(buildPath("./input.txt")), 1424472);
 })();
 
