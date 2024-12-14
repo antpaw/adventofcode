@@ -1,8 +1,8 @@
-export const compress = ([x, y]: number[], sizeX: number) =>
-	compressXY(x, y, sizeX);
+export const compress = ([row, col]: number[], rowSize: number) =>
+	compressXY(row, col, rowSize);
 
-export const compressXY = (x: number, y: number, sizeX: number) => {
-	return (x + 1) * (sizeX + 1) + (y + 1);
+export const compressXY = (row: number, col: number, rowSize: number) => {
+	return (row + 1) * (rowSize + 1) + (col + 1);
 };
 
 export const decompress = (coord: number, sizeX: number) => [
@@ -13,21 +13,25 @@ export const decompress = (coord: number, sizeX: number) => [
 export const compressTwoPoints = (
 	first: number[],
 	second: number[],
-	sizeX: number,
+	rowSize: number,
 ) => {
-	return compress(first, sizeX) * 10000 + compress(second, sizeX);
+	return compress(first, rowSize) * 10000 + compress(second, rowSize);
 };
 
 export const compressTwoPointsXY = (
-	x1: number,
-	y1: number,
-	x2: number,
-	y2: number,
-	sizeX: number,
-) => compressTwoPoints([x1, y1], [x2, y2], sizeX);
+	row1: number,
+	col1: number,
+	row2: number,
+	col2: number,
+	rowSize: number,
+) => compressTwoPoints([row1, col1], [row2, col2], rowSize);
 
 export const decompressTwoPoints = (coord: number, sizeX: number) => {
 	const first = Math.floor(coord / 10000);
 	const second = coord % 10000;
 	return [decompress(first, sizeX), decompress(second, sizeX)];
+};
+
+export const absModulo = (n: number, m: number) => {
+	return ((n % m) + m) % m;
 };
